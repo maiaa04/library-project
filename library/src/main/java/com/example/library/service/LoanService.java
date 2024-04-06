@@ -1,5 +1,6 @@
 package com.example.library.service;
 
+import com.example.library.error.NoSuchLoanException;
 import com.example.library.infrastructure.entity.LoanEntity;
 import com.example.library.infrastructure.repository.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,14 @@ public class LoanService {
         return loanRepository.findAll();
     }
     public LoanEntity getOne(long id){
-        return loanRepository.findById(id).orElseThrow(() -> new RuntimeException("Loan not found"));
+        return loanRepository.findById(id).orElseThrow(NoSuchLoanException::create);
     }
     public LoanEntity create(LoanEntity book){
         return loanRepository.save(book);
     }
     public void delete(long id){
         if(!loanRepository.existsById(id)){
-            throw new RuntimeException();
+            throw NoSuchLoanException.create();
         }
         loanRepository.deleteById(id);
     }

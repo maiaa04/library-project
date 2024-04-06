@@ -1,5 +1,6 @@
 package com.example.library.infrastructure.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -13,23 +14,26 @@ public class LoanEntity {
     @Column(name = "loan_id")
     private long loan_id;
 
-    @OneToMany
-    @Column(name = "book_ids")
-    private List<BookEntity> book_ids;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private BookEntity book_id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user_id; //?????
 
     @Basic
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "loan_date")
     private Date loan_date;
 
     @Basic
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "due_date")
     private Date due_date;
 
     @Basic
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "return_date")
     private Date return_date;
 
@@ -41,12 +45,12 @@ public class LoanEntity {
         this.loan_id = loan_id;
     }
 
-    public List<BookEntity> getBook_ids() {
-        return book_ids;
+    public BookEntity getBook_id() {
+        return book_id;
     }
 
-    public void setBook_ids(List<BookEntity> book_ids) {
-        this.book_ids = book_ids;
+    public void setBook_id(BookEntity book_id) {
+        this.book_id = book_id;
     }
 
     public UserEntity getUser_id() {

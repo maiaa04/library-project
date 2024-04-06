@@ -1,9 +1,10 @@
 package com.example.library.infrastructure.entity;
 
+import com.example.library.commonTypes.UserRole;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user", schema = "library")
+@Table(name = "users", schema = "library")
 public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -11,16 +12,16 @@ public class UserEntity {
     private long id;
 
     @Basic
-    @Column(name = "username", unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Basic // not sure how to hash it, will do later on
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Basic
-    @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private UserRole role;
 
     @Basic
     @Column(name = "email")
@@ -54,11 +55,11 @@ public class UserEntity {
         this.password = password;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 

@@ -34,6 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user){
         var newUser = userService.create(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);

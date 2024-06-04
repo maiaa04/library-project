@@ -34,6 +34,7 @@ public class BookController {
     }
 
     @PostMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<BookEntity> createBook(@RequestBody BookEntity book){
         var newBook = bookService.create(book);
         return new ResponseEntity<>(newBook, HttpStatus.CREATED);

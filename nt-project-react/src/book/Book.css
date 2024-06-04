@@ -1,0 +1,22 @@
+.book {
+  width: 150px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-details {
+  flex: 1;
+  padding: 9px;
+}
+
+.book-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: #000000;
+}
+
+.book-details-text {
+  font-size: 9px;
+  color: #7c7c7c;
+}

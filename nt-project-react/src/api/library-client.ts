@@ -25,6 +25,8 @@ export class LibraryClient {
         data
       );
 
+      this.client.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+      
       return {
         success: true,
         data: response.data,

@@ -4,59 +4,113 @@ import './BookGrid.css';
 import Typography from '@mui/material/Typography';
 import Book, { BookProps } from '../book/Book';
 import { useApi } from '../api/ApiProvider';
-import { Key, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-interface BookGridProps{
-  books: BookProps[],
-  currentPage: number,
-  totalItems: number,
-  totalPages: number,
-  hasMore: boolean
+interface BookGridProps {
+  books: BookProps[];
+  currentPage: number;
+  totalItems: number;
+  totalPages: number;
+  hasMore: boolean;
 }
 
+// export default function BookGrid() {
+//   const apiClient = useApi();
+//   const [allBookData, setBooks]= useState<BookGridProps | null>(null);
+
+//   useEffect(() => {
+//     const fetchBooks = async () => {
+//       const booksData = await apiClient.getBooks();
+//       console.log(booksData.data);
+//       setBooks(booksData.data);
+//     };
+//     fetchBooks();
+//   }, [apiClient]);
 
 export default function BookGrid() {
   const apiClient = useApi();
-  const [allBookData, setBooks]= useState<BookGridProps | null>(null);
+
+  const { t, i18n } = useTranslation();
+
+  const [books, setAllBooks] = useState<BookProps[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const booksData = await apiClient.getBooks();
-      console.log(booksData.data);
-      setBooks(booksData.data);
+      try {
+        let allBooksData: BookProps[] = [];
+
+        const booksData = await apiClient.getBooks();
+        // const books = booksData.data?.books || [];
+        // allBooksData = allBooksData.concat(books);
+
+        // setAllBooks(allBooksData);
+
+        if (Array.isArray(booksData.data)) {
+          const books = booksData.data || [];
+          allBooksData = allBooksData.concat(books);
+          setAllBooks(allBooksData);
+        } else {
+          console.error('Invalid books data:', booksData);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching books:', error);
+        setLoading(false);
+      }
     };
+
     fetchBooks();
   }, [apiClient]);
 
-  if(!allBookData){
-    return <div>Loading...</div>
+  if (loading) {
+    return <div>{'loading'}</div>;
   }
 
-  const books= allBookData!.books;
   console.log('books:', books);
 
   return (
+    // <div>
+    //   <div className="list-of-books-text">
+    //     <Typography variant="h5">List of books</Typography>
+    //   </div>
+    //    <Grid container spacing={2}>
+    //     {books.map((book) => (
+    //     <Grid item key={book.bookId} xs={2} sm={2} md={2}>
+    //       <div className="book-container">
+    //         <Book
+    //            bookId={book.bookId}
+    //            title={book.title}
+    //            author={book.author}
+    //            yearPublished={book.yearPublished}
+    //            avaliable={book.avaliable}
+    //          />
+    //        </div>
+    //      </Grid>
+    //    ))}
+    //  </Grid>
     <div>
       <div className="list-of-books-text">
-        <Typography variant="h5">List of books</Typography>
+        <Typography variant="h5">{t('listOfBooks')}</Typography>
       </div>
-       <Grid container spacing={2}>
+      <Grid container spacing={2}>
         {books.map((book) => (
-        <Grid item key={book.bookId} xs={2} sm={2} md={2}>
-          <div className="book-container">
-            <Book
-               bookId={book.bookId}
-               title={book.title}
-               author={book.author}
-               yearPublished={book.yearPublished}
-               avaliable={book.avaliable}
-             />
-           </div>
-         </Grid>
-       ))}
-     </Grid>
-     </div>
-  )
+          <Grid item key={book.bookId} xs={2} sm={2} md={2}>
+            <div className="book-container">
+              <Book
+                bookId={book.bookId}
+                title={book.title}
+                author={book.author}
+                publicationYear={book.publicationYear}
+                available={book.available}
+              />
+            </div>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  );
 }
 
 // function BookGrid() {

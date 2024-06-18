@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { LoginDto, LoginResponseDto } from './dto/login.dto';
+import { BooksResponseDTO } from './dto/books.dto';
 
 export type ClientResponse<T> = {
   success: boolean;
@@ -21,7 +22,7 @@ export class LibraryClient {
   ): Promise<ClientResponse<LoginResponseDto | null>> {
     try {
       const response: AxiosResponse<LoginResponseDto> = await this.client.post(
-        'http://localhost:8080/api/users/login',
+        '/users/login',
         data
       );
 
@@ -43,12 +44,10 @@ export class LibraryClient {
     }
   }
 
-  public async getBooks(): Promise<ClientResponse<any | null>> {
+  public async getBooks(): Promise<ClientResponse<BooksResponseDTO | null>> {
     try {
-      const response: AxiosResponse<LoginResponseDto> = await this.client.get(
-        'http://localhost:8080/api/books'
-      );
-
+      console.log(this.client.defaults.headers.common['Authorization']);
+      const response = await this.client.get('/books');
       return {
         success: true,
         data: response.data,

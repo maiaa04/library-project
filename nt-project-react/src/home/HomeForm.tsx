@@ -1,5 +1,5 @@
 import './HomeForm.css';
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -22,6 +22,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 import BookGrid from '../book-grid/BookGrid';
 import MeForm from '../me-form/MeForm';
+import { useTranslation } from 'react-i18next';
 const drawerWidth = 280;
 
 export default function HomeForm() {
@@ -38,6 +39,10 @@ export default function HomeForm() {
     navigate('/login');
   };
 
+  const { t, i18n } = useTranslation();
+  const home = t('home');
+  const profile = t('profile');
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -50,7 +55,7 @@ export default function HomeForm() {
       >
         <Toolbar className="toolbar-horizontal"> 
           <Typography variant="h5" noWrap component="div"> 
-            Bookish Corner
+            {t('library')}
           </Typography>
           <Button color="inherit" onClick={handleLogout} sx={{ color: 'white' }}>
             <LogoutIcon />
@@ -71,7 +76,7 @@ export default function HomeForm() {
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
           <List >
-            {['Home', 'Me'].map((text, index) => (
+            {[home, profile].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton
                   selected={selectedPage === text}
